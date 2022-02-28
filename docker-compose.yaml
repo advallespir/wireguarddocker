@@ -11,7 +11,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=America/Argentina/Buenos_Aires
+      - TZ=America/New_York
       - SERVERURL=darkunorvpn.duckdns.org #optional | Ip or domain of your server
       - SERVERPORT=51820 #optional
       - PEERS=10 #optional
@@ -45,7 +45,7 @@ services:
       - "80:80/tcp"
       - "443:443/tcp"
     environment:
-      TZ: 'America/Argentina/Buenos_Aires'
+      TZ: 'TZ=America/New_York'
       WEBPASSWORD: 'Falcon010203'
     volumes:
       - '/home/avallespir/pihole/:/etc/pihole/'
@@ -64,7 +64,7 @@ services:
     environment:
       - PUID=1000 #optional
       - PGID=1000 #optional
-      - TZ=Europe/Madrid
+      - TZ=America/New_York
       - SUBDOMAINS=darkunorvpn
       - TOKEN=1d426b02-baaa-4820-8f99-b32d0998ac6f
       - LOG_FILE=true#optional
