@@ -1,0 +1,80 @@
+ #Fork from the PeladoNerd's yml file https://github.com/pablokbs/peladonerd/tree/master/varios/12
+version: '3.7'
+
+services:
+  wireguard:
+    image: linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Argentina/Buenos_Aires
+      - SERVERURL=www.sismonda.com.ar #optional | Ip or domain of your server
+      - SERVERPORT=51820 #optional
+      - PEERS=10 #optional
+      - PEERDNS=auto #optional
+      - INTERNAL_SUBNET=10.13.13.0 #optional
+    volumes:
+      - /home/avallespir/wireguard/config:/config
+      - /lib/modules:/lib/modules
+      - /usr/src:/usr/src
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    dns:
+      - 172.20.0.7
+    restart: unless-stopped
+    networks:
+      containers:
+        ipv4_address: 172.20.0.6
+
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:v5.7
+    dns:
+      - "127.0.0.1"
+      - "1.1.1.1"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+      - "443:443/tcp"
+    environment:
+      TZ: 'America/Argentina/Buenos_Aires'
+      WEBPASSWORD: 'Falcon010203'
+    volumes:
+      - '/home/avallespir/pihole/:/etc/pihole/'
+      - '/home/avallespir/pihole/dnsmasq.d/:/etc/dnsmasq.d/'
+    # Recommended but not required (DHCP needs NET_ADMIN)
+    #cap_add:
+    #  - NET_ADMIN
+    restart: unless-stopped
+    networks:
+      containers:
+        ipv4_address: 172.20.0.7
+
+  duckdns:
+    image: linuxserver/duckdns
+    container_name: duckdns
+    environment:
+      - PUID=1000 #optional
+      - PGID=1000 #optional
+      - TZ=Europe/Madrid
+      - SUBDOMAINS=darkunorvpn
+      - TOKEN=1d426b02-baaa-4820-8f99-b32d0998ac6f
+      - LOG_FILE=true#optional
+    volumes:
+      - /home/avallespir/duckdns/config:/config #optional
+    restart: unless-stopped
+
+
+networks:
+  containers:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
