@@ -34,7 +34,7 @@ services:
 
   pihole:
     container_name: pihole
-    image: pihole/pihole:v5.7
+    image: pihole/pihole
     dns:
       - "127.0.0.1"
       - "1.1.1.1"
@@ -46,7 +46,7 @@ services:
       - "443:443/tcp"
     environment:
       TZ: 'TZ=America/New_York'
-      WEBPASSWORD: 'Falcon010203'
+      WEBPASSWORD: 'Falcon010203.!'
     volumes:
       - '/home/avallespir/pihole/:/etc/pihole/'
       - '/home/avallespir/pihole/dnsmasq.d/:/etc/dnsmasq.d/'
